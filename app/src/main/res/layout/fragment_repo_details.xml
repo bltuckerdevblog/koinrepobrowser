@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/loading_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/error_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="You didn't want all the details anyway"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/repo_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="koinrepobrowser" />
+
+        <TextView
+            android:id="@+id/project_description_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/repo_name_text_view"
+            tools:text="It looks like this project doesn't care to explain itself." />
+
+        <TextView
+            android:id="@+id/owner_header_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="Owner Details"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:typeface="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/project_description_text_view" />
+
+        <ImageView
+            android:id="@+id/user_avatar_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/owner_header_label_text_view"
+            tools:srcCompat="@tools:sample/avatars[1]" />
+
+        <TextView
+            android:id="@+id/owner_login_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toTopOf="@id/owner_name_text_view"
+            app:layout_constraintStart_toEndOf="@+id/user_avatar_image_view"
+            app:layout_constraintTop_toTopOf="@+id/user_avatar_image_view"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Abnormally Driven" />
+
+        <TextView
+            android:id="@+id/owner_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toTopOf="@id/follower_count_text_view"
+            app:layout_constraintStart_toEndOf="@+id/user_avatar_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/owner_login_text_view"
+            tools:text="Brett Tucker" />
+
+        <TextView
+            android:id="@+id/follower_count_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toTopOf="@id/following_count_text_view"
+            app:layout_constraintStart_toEndOf="@+id/user_avatar_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/owner_name_text_view"
+            tools:text="2 Followers" />
+
+        <TextView
+            android:id="@+id/following_count_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/user_avatar_image_view"
+            app:layout_constraintStart_toEndOf="@+id/user_avatar_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/follower_count_text_view"
+            tools:text="Following 2" />
+
+        <TextView
+            android:id="@+id/location_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="@+id/user_avatar_image_view"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/user_avatar_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/user_avatar_image_view"
+            tools:text="Irvine CA" />
+
+        <TextView
+            android:id="@+id/owner_bio_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/location_text_view"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_goneMarginTop="16dp"
+            tools:text="Nullam vel tortor at quam accumsan eleifend. Quisque lectus felis, mollis at enim et, volutpat rhoncus lacus. Nullam magna augue, condimentum vel elit sed, pretium rhoncus magna. Quisque nibh turpis, sodales eget neque in, egestas porta tortor. Mauris turpis justo, varius non mauris a, blandit finibus turpis. Duis dapibus fringilla consequat. Morbi ac congue diam. Proin quis tortor a nunc tincidunt blandit. Praesent rutrum lobortis erat, vel euismod enim facilisis non. Ut in augue ipsum. Fusce tellus lectus, sollicitudin at sem vel, tempor ornare leo." />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
