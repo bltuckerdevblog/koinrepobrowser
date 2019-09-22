@@ -11,12 +11,6 @@ data class UserDetailsDto(
 	@field:SerializedName("login")
 	val login: String,
 
-	@field:SerializedName("blog")
-	val blog: String? = null,
-
-	@field:SerializedName("company")
-	val company: String? = null,
-
 	@field:SerializedName("id")
 	val id: Int,
 

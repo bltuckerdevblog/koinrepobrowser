@@ -2,7 +2,7 @@ package com.abnormallydriven.koinrepobrowser.common
 
 import com.google.gson.annotations.SerializedName
 
-data class GetRepositoriesResponse(
+data class RepositoryDto(
 
 	@field:SerializedName("description")
 	val description: String,
