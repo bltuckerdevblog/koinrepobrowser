@@ -15,8 +15,10 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         setSupportActionBar(binding.toolbar)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, RepositoryListFragment())
-            .commit()
+        if(savedInstanceState == null){
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, RepositoryListFragment())
+                .commit()
+        }
     }
 }
