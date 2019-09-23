@@ -11,13 +11,9 @@ import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 
-class RepositoryDetailsFragmentViewModel : ViewModel() {
-
-    private lateinit var githubRepository: GithubRepository
-
-    private lateinit var ioScheduler: Scheduler
-
-    private lateinit var uiScheduler: Scheduler
+class RepositoryDetailsFragmentViewModel(private val githubRepository: GithubRepository,
+                                         private val ioScheduler: Scheduler,
+                                         private val uiScheduler: Scheduler) : ViewModel() {
 
     private val modelRelay : BehaviorRelay<RepositoryDetailsFragmentModel> = BehaviorRelay.createDefault(
         RepositoryDetailsFragmentModel(null, null, true, false)
@@ -26,12 +22,6 @@ class RepositoryDetailsFragmentViewModel : ViewModel() {
     val modelObservable : Observable<RepositoryDetailsFragmentModel> = modelRelay
 
     private var hasFetchedData = false
-
-    fun initialize(githubRepository: GithubRepository, ioScheduler: Scheduler, uiScheduler: Scheduler){
-        this.githubRepository = githubRepository
-        this.ioScheduler = ioScheduler
-        this.uiScheduler = uiScheduler
-    }
 
     @SuppressLint("CheckResult")
     fun fetchData(repositoryId: Int, username: String){

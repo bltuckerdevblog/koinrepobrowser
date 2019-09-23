@@ -1,26 +1,20 @@
 package com.abnormallydriven.koinrepobrowser.repos
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.abnormallydriven.koinrepobrowser.R
-import com.abnormallydriven.koinrepobrowser.common.GithubApi
-import com.abnormallydriven.koinrepobrowser.common.GithubRepository
 import com.abnormallydriven.koinrepobrowser.common.RepositoryDto
 import com.abnormallydriven.koinrepobrowser.databinding.FragmentRepositoryListBinding
 import com.abnormallydriven.koinrepobrowser.repodetails.RepositoryDetailsFragmentFactory
-import com.google.gson.Gson
 import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import org.koin.android.ext.android.inject
+import org.koin.androidx.scope.currentScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 
 class RepositoryListFragment : Fragment() {
 
@@ -28,55 +22,15 @@ class RepositoryListFragment : Fragment() {
 
     private lateinit var binding: FragmentRepositoryListBinding
 
-    private lateinit var viewModel: RepositoryListFragmentViewModel
+    private val fragmentViewModel: RepositoryListFragmentViewModel by viewModel()
 
-    private lateinit var repositoryAdapter: RepositoryAdapter
+    private val repositoryAdapter: RepositoryAdapter by currentScope.inject()
 
-    private lateinit var computationScheduler: Scheduler
+    private val computationScheduler: Scheduler by inject(named("computation"))
 
-    private lateinit var uiScheduler: Scheduler
+    private val uiScheduler: Scheduler by inject(named("ui"))
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        viewModel = ViewModelProviders.of(this).get(RepositoryListFragmentViewModel::class.java)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val diffCallback = RepositoryDiffUtilItemCallback()
-
-        repositoryAdapter = RepositoryAdapter(diffCallback)
-
-        computationScheduler = Schedulers.computation()
-
-        uiScheduler = AndroidSchedulers.mainThread()
-
-        if (savedInstanceState == null) {
-
-            val gson = Gson()
-
-            val retrofitClient = Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-                .build()
-
-            val githubApi = retrofitClient.create(GithubApi::class.java)
-
-            val githubRepository = GithubRepository(githubApi)
-
-            viewModel.initialize(githubRepository, Schedulers.io(), AndroidSchedulers.mainThread())
-        }
-
-    }
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRepositoryListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -89,9 +43,9 @@ class RepositoryListFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        viewModel.fetchData()
+        fragmentViewModel.fetchData()
 
-        modelSubscription = viewModel.modelObservable
+        modelSubscription = fragmentViewModel.modelObservable
             .map { RepositoryListFragmentBindingModel(it.isLoading, it.isError, it.repositoryList) }
             .subscribeOn(computationScheduler)
             .observeOn(uiScheduler)

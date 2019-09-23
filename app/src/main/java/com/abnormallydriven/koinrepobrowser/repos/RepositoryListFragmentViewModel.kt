@@ -8,25 +8,15 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 
-class RepositoryListFragmentViewModel : ViewModel() {
-
-    private lateinit var githubRepository: GithubRepository
-
-    private lateinit var ioScheduler: Scheduler
-
-    private lateinit var uiScheduler: Scheduler
+class RepositoryListFragmentViewModel(val githubRepository: GithubRepository,
+                                      val ioScheduler: Scheduler,
+                                      val uiScheduler: Scheduler) : ViewModel() {
 
     private val modelRelay = BehaviorRelay.createDefault<RepositoryListFragmentModel>(RepositoryListFragmentModel(emptyList(), true, false))
 
     val modelObservable: Observable<RepositoryListFragmentModel> = modelRelay
 
     private var hasFetchedData = false
-
-    fun initialize(githubRepository: GithubRepository, ioScheduler: Scheduler, uiScheduler: Scheduler) {
-        this.githubRepository = githubRepository
-        this.ioScheduler = ioScheduler
-        this.uiScheduler = uiScheduler
-    }
 
     @SuppressLint("CheckResult")
     fun fetchData(){

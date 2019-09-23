@@ -6,74 +6,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProviders
-import com.abnormallydriven.koinrepobrowser.common.GithubApi
 import com.abnormallydriven.koinrepobrowser.common.GithubRepository
 import com.abnormallydriven.koinrepobrowser.common.RepositoryDto
 import com.abnormallydriven.koinrepobrowser.common.UserDetailsDto
 import com.abnormallydriven.koinrepobrowser.databinding.FragmentRepoDetailsBinding
-import com.google.gson.Gson
 import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 
 class RepositoryDetailsFragment : Fragment() {
 
-    private lateinit var computationScheduler: Scheduler
+    private val computationScheduler: Scheduler by inject(named("computation"))
 
-    private lateinit var uiScheduler: Scheduler
+    private val uiScheduler: Scheduler by inject(named("ui"))
+
+    private val fragmentViewModel: RepositoryDetailsFragmentViewModel by viewModel()
 
     private lateinit var binding: FragmentRepoDetailsBinding
 
-    private lateinit var viewModel: RepositoryDetailsFragmentViewModel
-
     private var modelSubscription: Disposable? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        viewModel = ViewModelProviders.of(this)[RepositoryDetailsFragmentViewModel::class.java]
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        computationScheduler = Schedulers.computation()
-
-        uiScheduler = AndroidSchedulers.mainThread()
-
-        if(savedInstanceState == null){
-            val gson = Gson()
-
-            val retrofitClient = Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-                .build()
-
-            val githubApi = retrofitClient.create(GithubApi::class.java)
-
-            val githubRepository = GithubRepository(githubApi)
-
-            val ioScheduler = Schedulers.io()
-
-            viewModel.initialize(githubRepository, ioScheduler, uiScheduler)
-        }
-
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRepoDetailsBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onStart() {
@@ -81,9 +39,9 @@ class RepositoryDetailsFragment : Fragment() {
 
         val repositoryId = arguments?.getInt(REPOSITORY_ID_ARG) ?: 0
         val username = arguments?.getString(OWNER_USERNAME_ARG) ?: ""
-        viewModel.fetchData(repositoryId, username)
+        fragmentViewModel.fetchData(repositoryId, username)
 
-        modelSubscription = viewModel.modelObservable
+        modelSubscription = fragmentViewModel.modelObservable
             .map{ RepositoryDetailsFragmentBindingModel(it.userDetailsDto, it.repositoryDto, it.isLoading, it.isError)}
             .subscribeOn(computationScheduler)
             .observeOn(uiScheduler)
