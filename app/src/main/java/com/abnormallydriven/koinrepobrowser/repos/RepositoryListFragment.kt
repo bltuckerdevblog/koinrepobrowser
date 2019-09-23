@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.abnormallydriven.koinrepobrowser.R
 import com.abnormallydriven.koinrepobrowser.common.GithubApi
 import com.abnormallydriven.koinrepobrowser.common.GithubRepository
 import com.abnormallydriven.koinrepobrowser.common.RepositoryDto
 import com.abnormallydriven.koinrepobrowser.databinding.FragmentRepositoryListBinding
+import com.abnormallydriven.koinrepobrowser.repodetails.RepositoryDetailsFragmentFactory
 import com.google.gson.Gson
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -50,7 +52,7 @@ class RepositoryListFragment : Fragment() {
 
         uiScheduler = AndroidSchedulers.mainThread()
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
 
             val gson = Gson()
 
@@ -70,7 +72,11 @@ class RepositoryListFragment : Fragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentRepositoryListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -78,7 +84,6 @@ class RepositoryListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.repositoriesRecyclerView.adapter = repositoryAdapter
     }
-
 
 
     override fun onStart() {
@@ -95,15 +100,43 @@ class RepositoryListFragment : Fragment() {
             }, {})
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        repositoryAdapter.itemClickHandler = this::openRepoDetailsFragment
+
+    }
+
+    override fun onPause() {
+        repositoryAdapter.itemClickHandler = null
+        super.onPause()
+    }
+
     override fun onStop() {
         modelSubscription?.dispose()
         super.onStop()
     }
+
+    private fun openRepoDetailsFragment(repositoryDto: RepositoryDto) {
+
+        val fragmentFactory = RepositoryDetailsFragmentFactory()
+
+        val fragment = fragmentFactory.create(repositoryDto)
+
+        activity?.supportFragmentManager?.apply {
+            beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack("details")
+                .commit()
+        }
+    }
 }
 
-data class RepositoryListFragmentBindingModel(val isLoading: Boolean,
-                                              val isError: Boolean,
-                                              val repositoryList: List<RepositoryDto>){
+data class RepositoryListFragmentBindingModel(
+    val isLoading: Boolean,
+    val isError: Boolean,
+    val repositoryList: List<RepositoryDto>
+) {
 
     val showLoadingView = isLoading
     val showErrorView = !isLoading && isError

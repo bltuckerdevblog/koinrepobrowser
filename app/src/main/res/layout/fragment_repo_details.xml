@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="model"
+            type="com.abnormallydriven.koinrepobrowser.repodetails.RepositoryDetailsFragmentBindingModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,6 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{model.showLoadingView}"
             tools:visibility="gone" />
 
 
@@ -26,6 +33,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{model.showErrorView}"
             tools:text="You didn't want all the details anyway"
             tools:visibility="gone" />
 
@@ -37,6 +45,7 @@
             android:layout_marginTop="16dp"
             android:textColor="@android:color/black"
             android:textSize="18sp"
+            android:text="@{model.reponameText}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="koinrepobrowser" />
@@ -45,6 +54,7 @@
             android:id="@+id/project_description_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{model.projectDescriptionText}"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:textColor="@android:color/black"
@@ -68,10 +78,11 @@
 
         <ImageView
             android:id="@+id/user_avatar_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            app:imageUrl="@{model.userAvatarUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/owner_header_label_text_view"
             tools:srcCompat="@tools:sample/avatars[1]" />
@@ -83,6 +94,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@android:color/black"
+            android:text="@{model.usernameText}"
             app:layout_constraintBottom_toTopOf="@id/owner_name_text_view"
             app:layout_constraintStart_toEndOf="@+id/user_avatar_image_view"
             app:layout_constraintTop_toTopOf="@+id/user_avatar_image_view"
@@ -95,6 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:text="@{model.ownerNameText}"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toTopOf="@id/follower_count_text_view"
             app:layout_constraintStart_toEndOf="@+id/user_avatar_image_view"
@@ -107,6 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:text="@{model.followerCountText}"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toTopOf="@id/following_count_text_view"
             app:layout_constraintStart_toEndOf="@+id/user_avatar_image_view"
@@ -121,6 +135,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:textColor="@android:color/black"
+            android:text="@{model.followingText}"
             app:layout_constraintBottom_toBottomOf="@+id/user_avatar_image_view"
             app:layout_constraintStart_toEndOf="@+id/user_avatar_image_view"
             app:layout_constraintTop_toBottomOf="@+id/follower_count_text_view"
@@ -132,6 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="@android:color/black"
+            android:text="@{model.locationText}"
             app:layout_constraintEnd_toEndOf="@+id/user_avatar_image_view"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/user_avatar_image_view"
@@ -146,6 +162,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:textColor="@android:color/black"
+            android:text="@{model.bioText}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -153,6 +170,13 @@
             app:layout_constraintVertical_bias="0.0"
             app:layout_goneMarginTop="16dp"
             tools:text="Nullam vel tortor at quam accumsan eleifend. Quisque lectus felis, mollis at enim et, volutpat rhoncus lacus. Nullam magna augue, condimentum vel elit sed, pretium rhoncus magna. Quisque nibh turpis, sodales eget neque in, egestas porta tortor. Mauris turpis justo, varius non mauris a, blandit finibus turpis. Duis dapibus fringilla consequat. Morbi ac congue diam. Proin quis tortor a nunc tincidunt blandit. Praesent rutrum lobortis erat, vel euismod enim facilisis non. Ut in augue ipsum. Fusce tellus lectus, sollicitudin at sem vel, tempor ornare leo." />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/content_group"
+            app:visibility="@{model.showContentView}"
+            app:constraint_referenced_ids="owner_header_label_text_view,repo_name_text_view,project_description_text_view,owner_bio_text_view,user_avatar_image_view,owner_login_text_view,owner_name_text_view,follower_count_text_view,following_count_text_view,location_text_view,owner_bio_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

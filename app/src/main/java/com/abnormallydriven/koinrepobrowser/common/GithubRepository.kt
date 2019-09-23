@@ -28,4 +28,8 @@ class GithubRepository(private val githubApi: GithubApi) {
             .doOnSuccess { userCache[username] = it }
     }
 
+    fun getRepository(repositoryId: Int): Single<RepositoryDto> {
+        return githubApi.getRepository(repositoryId)
+    }
+
 }

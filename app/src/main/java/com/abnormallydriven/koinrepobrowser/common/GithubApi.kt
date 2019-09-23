@@ -9,6 +9,9 @@ interface GithubApi {
     @GET("repositories")
     fun getRepositories(): Single<List<RepositoryDto>>
 
+    @GET("repositories/{id}")
+    fun getRepository(@Path("id") id: Int): Single<RepositoryDto>
+
     @GET("users/{username}")
     fun getUserDetails(@Path("username") username: String): Single<UserDetailsDto>
 
